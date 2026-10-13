@@ -1,0 +1,1 @@
+PLACEHOLDER: questo file lo vede solo chi usa la password 'amici123'. Sostituiscilo con un tuo file e aggiorna il nome in config.js.

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Area file</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#111;color:#eee;display:flex;justify-content:center;padding:40px 16px;margin:0}
+  .box{background:#1c1c1c;padding:28px;border-radius:14px;width:100%;max-width:420px;height:fit-content}
+  h1{margin-top:0;font-size:1.4rem}
+  input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:0;font-size:1rem;box-sizing:border-box}
+  button{background:#6c5ce7;color:#fff;cursor:pointer}
+  a{color:#a29bfe}
+  .file{display:block;background:#2a2a2a;padding:12px;border-radius:8px;margin-top:8px;text-decoration:none}
+  .err{color:#ff7675}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <div id="login">
+    <h1>🔒 Inserisci la password</h1>
+    <input type="password" id="pw" placeholder="Password" autofocus>
+    <button id="entra">Entra</button>
+    <p class="err" id="errore"></p>
+  </div>
+
+  <div id="area" class="hidden">
+    <h1 id="titolo"></h1>
+    <p id="messaggio"></p>
+    <div id="lista"></div>
+    <p><a href="#" id="esci">Esci</a></p>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  const login = document.getElementById('login');
+  const area = document.getElementById('area');
+  const pw = document.getElementById('pw');
+
+  function entra() {
+    const a = ACCESSI[pw.value.trim()];
+    if (!a) {
+      document.getElementById('errore').textContent = 'Password errata.';
+      return;
+    }
+    document.getElementById('titolo').textContent = a.titolo;
+    document.getElementById('messaggio').textContent = a.messaggio;
+    const lista = document.getElementById('lista');
+    lista.innerHTML = '';
+    a.files.forEach(function (f) {
+      const link = document.createElement('a');
+      link.className = 'file';
+      link.href = 'privati/' + encodeURIComponent(f);
+      link.setAttribute('download', f);
+      link.textContent = '📄 ' + f;
+      lista.appendChild(link);
+    });
+    login.classList.add('hidden');
+    area.classList.remove('hidden');
+  }
+
+  document.getElementById('entra').addEventListener('click', entra);
+  pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') entra(); });
+  document.getElementById('esci').addEventListener('click', function (e) {
+    e.preventDefault();
+    pw.value = '';
+    document.getElementById('errore').textContent = '';
+    area.classList.add('hidden');
+    login.classList.remove('hidden');
+  });
+</script>
+</body>
+</html>
